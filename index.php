@@ -2,6 +2,8 @@
 
 /*
 
+ ALGORITHMS FOR THE INTELLIGENT WEB
+ ----------------------------------
  - Hierarchical
     - Agglomerative (bottom-up)
     - 
@@ -34,9 +36,18 @@
      0   A  B  C  D  E
 
  - "From an implementation perspective, we capture the structure of the dendrogram with two linked hash maps..."
+ - Single link     O(k n^2)
+ - Average link    O(k n^2)
+ - MST single link O(k n^2)
+
+ ONLINE
+ ------
+ - Grid-based looks crap (like a grid)
 
 
+ NOTES
  - Maybe it's quicker to use integers instead of floating point numbers for the long/lat values
+ - On INSERT maybe we can asynchronously update adjacency matrix (instead of waiting until we need to recluster)
  */
 
 ?>
