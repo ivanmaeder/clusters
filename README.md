@@ -47,3 +47,19 @@
 ## Ideas
  - Maybe it's quicker to use integers instead of floating point numbers for the long/lat values
  - On INSERT maybe we can asynchronously update adjacency matrix (instead of waiting until we need to recluster)
+ 
+## Installation
+
+```
+--2014-07-27
+CREATE TABLE IF NOT EXISTS `points` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `coordinate` point NOT NULL,
+  `lat` decimal(10,8) NOT NULL,
+  `lng` decimal(11,8) NOT NULL,
+  `point` point NOT NULL,
+  `x` decimal(16,6) NOT NULL,
+  `y` decimal(16,6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+```

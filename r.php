@@ -16,6 +16,7 @@ $include_path = array($_SERVER['DOCUMENT_ROOT'],
 set_include_path(implode($include_path, ':'));
 
 include('db.php');
+include('maps.php');
 include('redirect.php');
 include('view.php');
 
