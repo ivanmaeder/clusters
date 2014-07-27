@@ -41,14 +41,14 @@ class Map_toPointTest extends \PHPUnit_Framework_TestCase
         $actual = \maps\toPoint(MIN_LAT, 180);
         $expected = array('x' => 268435456.000000, 'y' => 267995781.597516);
 
-        \maps\toPoint(-90, 180);
+        $this->assertWithLimitedPrecision($actual, $expected);
     }
 
     function testMapKitBottomRight() {
         $actual = \maps\toPoint(MIN_MAPKIT_LAT, 180);
         $expected = array('x' => 268435456.000000, 'y' => 267995781.597516);
 
-        \maps\toPoint(-90, 180);
+        $this->assertWithLimitedPrecision($actual, $expected);
     }
 
     function testInsideBottomRight() {

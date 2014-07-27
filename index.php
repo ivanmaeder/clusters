@@ -22,7 +22,7 @@ body {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 var map;
-var originalMarkers = [];
+var markers = [];
 
 function initialize() {
     var mapOptions = {
@@ -33,7 +33,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById("map-canvas"),
         mapOptions);
 
-    loadOriginalMarkers();
+    loadMarkers('/ajax/markers.php');
 }
 
 function showMarkers(markers) {
@@ -48,27 +48,33 @@ function hideMarkers(markers) {
     }
 }
 
-function loadOriginalMarkers() {
-    $.get('markers.php', function(data) {
+function loadMarkers(script) {
+    $.get(script, function(data) {
+        markers[script] = [];
+
         for (var i = 0; i < data.length; i++) {
             var lat = data[i]['lat'];
             var lng = data[i]['lng'];
 
             var marker = new google.maps.Marker({ position: new google.maps.LatLng(lat, lng)});
 
-            originalMarkers.push(marker);
+            markers[script].push(marker);
         }
 
-        showMarkers(originalMarkers);
+        showMarkers(markers[script]);
     }, 'json');
 }
 
 $(function() {
     $('#map-canvas').click(function() {
-        if (originalMarkers[0].getMap() != null) {
-            hideMarkers(originalMarkers);
-        } else {
-            showMarkers(originalMarkers);
+        if (markers['/ajax/markers.php'][0].getMap() != null) {
+            hideMarkers(markers['/ajax/markers.php']);
+
+            loadMarkers('/ajax/markers_cluster1.php');
+        } else if (markers['/ajax/markers_cluster1.php'][0].getMap() != null) {
+            hideMarkers(markers['/ajax/markers_cluster1.php']);
+
+            loadMarkers('/ajax/markers.php');
         }
     });
 });

@@ -42,4 +42,17 @@ function isValidCoordinate($lat, $lng) {
     return $lat >= MIN_LAT && $lat <= MAX_LAT && $lng >= MIN_LNG && $lng <= MAX_LNG;
 }
 
+function toCoordinate($x, $y) {
+    if ($x > MAPKIT_MAP_WIDTH) {
+        $lng = -180;
+    }
+    else {
+        $lng = ($x - (MAPKIT_MAP_WIDTH / 2)) / (MAPKIT_MAP_WIDTH / 360);
+    }
+
+    $lat = (atan(exp(($y - MAPKIT_MAP_WIDTH / 2) / -MAPKIT_MAP_WIDTH * (2 * M_PI))) - (M_PI / 4)) * 2 * 180 / M_PI;
+
+    return array('lat' => $lat, 'lng' => $lng);
+}
+
 ?>
