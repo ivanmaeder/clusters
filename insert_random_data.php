@@ -7,7 +7,7 @@ require_once('sql/points.php');
 define('PRECISION', 100000000);
 
 for ($i = 0; $i < 1000; $i++) {
-    $random_lat = rand( -90 * PRECISION,  90 * PRECISION) / PRECISION;
+    $random_lat = rand(MIN_MAPKIT_LAT * PRECISION, MAX_MAPKIT_LAT * PRECISION) / PRECISION;
     $random_lng = rand(-180 * PRECISION, 180 * PRECISION) / PRECISION;
 
     $point = \maps\toPoint($random_lat, $random_lng);

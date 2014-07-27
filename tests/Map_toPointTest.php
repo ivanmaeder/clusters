@@ -1,8 +1,6 @@
 <?php
 
-/* Expected values obtained through MKMapPointForCoordinate.
- */
-class ClusterTest extends \PHPUnit_Framework_TestCase
+class Map_toPointTest extends \PHPUnit_Framework_TestCase
 {
     function testCenter() {
         $actual = \maps\toPoint(0, 0);
@@ -12,43 +10,57 @@ class ClusterTest extends \PHPUnit_Framework_TestCase
     }
 
     function testTopLeft() {
-        $actual = \maps\toPoint(90, -180);
+        $actual = \maps\toPoint(MAX_LAT, -180);
         $expected = array('x' => 0.000000, 'y' => 439674.402484);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
 
     function testInsideTopLeft() {
-        $actual = \maps\toPoint(89, -179);
-        $expected = array('x' => 745654.044444, 'y' => 439674.402484);
+        $actual = \maps\toPoint(MAX_LAT - 1, -180);
+        $expected = array('x' => 0.000000, 'y' => 439674.402484);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
 
-    function testInsideTopLeftThreshold() {
-        $actual = \maps\toPoint(84, -174);
-        $expected = array('x' => 4473924.266667, 'y' => 8240909.780312);
+    function testMapKitTopLeft() {
+        $actual = \maps\toPoint(MAX_MAPKIT_LAT, -180);
+        $expected = array('x' => 0.000000, 'y' => 439674.402484);
+
+        $this->assertWithLimitedPrecision($actual, $expected);
+    }
+
+    function testInsideMapKitTopLeft() {
+        $actual = \maps\toPoint(MAX_MAPKIT_LAT - 1, -180);
+        $expected = array('x' => 0.000000, 'y' => 8240909.780312);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
 
     function testBottomRight() {
-        $actual = \maps\toPoint(-90, 180);
+        $actual = \maps\toPoint(MIN_LAT, 180);
+        $expected = array('x' => 268435456.000000, 'y' => 267995781.597516);
+
+        \maps\toPoint(-90, 180);
+    }
+
+    function testMapKitBottomRight() {
+        $actual = \maps\toPoint(MIN_MAPKIT_LAT, 180);
+        $expected = array('x' => 268435456.000000, 'y' => 267995781.597516);
+
+        \maps\toPoint(-90, 180);
+    }
+
+    function testInsideBottomRight() {
+        $actual = \maps\toPoint(MIN_LAT + 1, 180);
         $expected = array('x' => 268435456.000000, 'y' => 267995781.597516);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
 
-    function testInsideBottomRight() {
-        $actual = \maps\toPoint(-89, 179);
-        $expected = array('x' => 267689801.955556, 'y' => 267995781.597516);
-
-        $this->assertWithLimitedPrecision($actual, $expected);
-    }
-
-    function testInsideBottomRightThreshold() {
-        $actual = \maps\toPoint(-84, 174);
-        $expected = array('x' => 263961531.733333, 'y' => 260194546.219688);
+    function testInsideMapKitBottomRight() {
+        $actual = \maps\toPoint(MIN_MAPKIT_LAT + 1, 180);
+        $expected = array('x' => 268435456.000000, 'y' => 260194546.219688);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
@@ -84,6 +96,20 @@ class ClusterTest extends \PHPUnit_Framework_TestCase
     function testUshuaia() {
         $actual = \maps\toPoint(-54.8000, -68.3000);
         $expected = array('x' => 83289556.764444, 'y' => 183270538.070462);
+
+        $this->assertWithLimitedPrecision($actual, $expected);
+    }
+
+    function testErrorLat() {
+        $actual = \maps\toPoint(MIN_LAT - 1, 0);
+        $expected = array('x' => -1.000000, 'y' => -1.000000);
+
+        $this->assertWithLimitedPrecision($actual, $expected);
+    }
+
+    function testErrorLng() {
+        $actual = \maps\toPoint(0, MAX_LNG + 1);
+        $expected = array('x' => -1.000000, 'y' => -1.000000);
 
         $this->assertWithLimitedPrecision($actual, $expected);
     }
