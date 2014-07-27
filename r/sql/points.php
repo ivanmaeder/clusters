@@ -9,8 +9,9 @@ function fetchAll() {
     return \db\fetchAll($sql);
 }
 
-function fetchRectCount($topLeftX, $topLeftY, $bottomRightX, $bottomRightY) {
-    $sql = "SELECT COUNT(*)
+function fetchAverageForRect($topLeftX, $topLeftY, $bottomRightX, $bottomRightY) {
+    $sql = "SELECT AVG(lat) AS avg_lat,
+              AVG(lng) AS avg_lng
             FROM points
             WHERE x >= $topLeftX
               AND x < $bottomRightX

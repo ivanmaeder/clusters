@@ -4,35 +4,45 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/r.php');
 
 require_once('sql/points.php');
 
-//Grid-based clustering algorithm
+/* Grid-based clustering algorithm.  
+ *
+ * Not bad for sparsely populated maps, otherwise the grid is obvious.
+ */
 
 define('GRID_EDGE_SIZE', MAPKIT_MAP_WIDTH / 12);
 
 $coordinates = array();
 
-$x = 0;
-$y = 0;
+$grid_x = 0;
+$grid_y = 0;
 
-do {
-    $result = \sql\points\fetchRectCount($x, $y, $x + GRID_EDGE_SIZE, $y + GRID_EDGE_SIZE);
+while (moreGridPositionsAvailable($grid_x, $grid_y)) {
+    $result = \sql\points\fetchAverageForRect($grid_x, $grid_y, $grid_x + GRID_EDGE_SIZE, $grid_y + GRID_EDGE_SIZE);
 
-    if ($result['COUNT(*)'] > 0) {
-        $centroidX = $x + GRID_EDGE_SIZE / 2;
-        $centroidY = $y + GRID_EDGE_SIZE / 2;
+    if ($result['avg_lat']) {
+        $coordinate = array('lat' => $result['avg_lat'], 'lng' => $result['avg_lng']);
 
-        $coordinate = \maps\toCoordinate($centroidX, $centroidY);
         array_push($coordinates, $coordinate);
     }
 
+    list($grid_x, $grid_y) = nextGridPosition($grid_x, $grid_y);
+}
+
+echo json_encode($coordinates);
+
+function moreGridPositionsAvailable($x, $y) {
+    return ($y + GRID_EDGE_SIZE) <= MAPKIT_MAP_HEIGHT;
+}
+
+function nextGridPosition($x, $y) {
     $x += GRID_EDGE_SIZE;
 
     if ($x > MAPKIT_MAP_WIDTH) {
         $x = 0;
         $y += GRID_EDGE_SIZE;
     }
-}
-while (($y + GRID_EDGE_SIZE) <= MAPKIT_MAP_HEIGHT);
 
-echo json_encode($coordinates);
+    return array($x, $y);
+}
 
 ?>
