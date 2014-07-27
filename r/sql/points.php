@@ -19,6 +19,13 @@ CREATE TABLE IF NOT EXISTS `points` (
 
 */
 
+function fetchAll() {
+    $sql = "SELECT lat, lng
+            FROM points";
+
+    return \db\fetchAll($sql);
+}
+
 function insert($lat, $lng, $x, $y) {
     $sql = "INSERT INTO points (
               coordinate,
