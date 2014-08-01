@@ -32,8 +32,6 @@ function initialize() {
 
     map = new google.maps.Map(document.getElementById("map-canvas"),
         mapOptions);
-
-    loadMarkers('/ajax/markers.php');
 }
 
 function showMarkers(markers) {
@@ -43,8 +41,10 @@ function showMarkers(markers) {
 }
 
 function hideMarkers(markers) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
+    if (markers != null) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
     }
 }
 
@@ -66,22 +66,36 @@ function loadMarkers(script) {
 }
 
 $(function() {
-    $('#map-canvas').click(function() {
-        if (markers['/ajax/markers.php'][0].getMap() != null) {
-            hideMarkers(markers['/ajax/markers.php']);
+    $('#0').click(function() {
+        hideMarkers(markers['/ajax/markers_cluster1.php']);
+        hideMarkers(markers['/ajax/markers_cluster2.php']);
 
-            loadMarkers('/ajax/markers_cluster1.php');
-        } else if (markers['/ajax/markers_cluster1.php'][0].getMap() != null) {
-            hideMarkers(markers['/ajax/markers_cluster1.php']);
+        loadMarkers('/ajax/markers.php');
+    });
 
-            loadMarkers('/ajax/markers.php');
-        }
+    $('#1').click(function() {
+        hideMarkers(markers['/ajax/markers.php']);
+        hideMarkers(markers['/ajax/markers_cluster2.php']);
+
+        loadMarkers('/ajax/markers_cluster1.php');
+    });
+
+    $('#2').click(function() {
+        hideMarkers(markers['/ajax/markers.php']);
+        hideMarkers(markers['/ajax/markers_cluster1.php']);
+
+        loadMarkers('/ajax/markers_cluster2.php');
     });
 });
 
 </script>
 </head>
 <body>
+    <div style="position: absolute; z-index: 999999; bottom: 10px; left: 10px">
+        <input type="button" id="0" value="All">
+        <input type="button" id="1" value="Grid">
+        <input type="button" id="2" value="Nearest neighbour">
+    </div>
     <div id="map-canvas" />
 </body>
 </html>
