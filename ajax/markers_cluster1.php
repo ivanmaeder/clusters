@@ -9,7 +9,7 @@ require_once('sql/points.php');
  * Not bad for sparsely populated maps, otherwise the grid is obvious.
  */
 
-define('GRID_EDGE_SIZE', MAPKIT_MAP_WIDTH / 12);
+define('GRID_EDGE_SIZE', MAPKIT_MAP_WIDTH / 16);
 
 $coordinates = array();
 

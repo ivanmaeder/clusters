@@ -12,8 +12,37 @@ function fetchAllDistances() {
 
     return \db\fetchAll($sql);
 }
+
+function fetchNearbyPoints($id, $distance) {
+    $center = fetch($id);
+
+    $x = $center['x'];
+    $y = $center['y'];
+
+    $min_x = $x - $distance;
+    $max_x = $x + $distance;
+    $min_y = $y - $distance;
+    $max_y = $y + $distance;
+
+    /* The id > $id condition is to avoid duplicates.
+     */
+    $sql = "SELECT t.*,
+              ST_DISTANCE(point, GEOMFROMTEXT('POINT($x $y)')) AS distance
+            FROM (
+              SELECT *
+              FROM points
+              WHERE id > $id
+                AND x >= $min_x
+                AND y >= $min_y
+                AND x < $max_x
+                AND y < $max_y
+              ) AS t";
+
+    return \db\fetchAll($sql);
+}
+
 function fetchAll() {
-    $sql = "SELECT lat, lng
+    $sql = "SELECT *
             FROM points";
 
     return \db\fetchAll($sql);
@@ -49,10 +78,10 @@ function insert($lat, $lng, $x, $y) {
               y
             )
             VALUES (
-              GeomFromText('POINT($lng $lat)'),
+              GEOMFROMTEXT('POINT($lng $lat)'),
               $lat,
               $lng,
-              GeomFromText('POINT($x $y)'),
+              GEOMFROMTEXT('POINT($x $y)'),
               $x,
               $y
             )";

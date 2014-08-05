@@ -5,6 +5,9 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/r.php');
 require_once('sql/points.php');
 
 /* Single-link clustering algorithm.
+ *
+ * Looks good, but this implementation runs into memory issues very
+ * quickly (900 points require > 128 MB).
  */
 
 $result = \sql\points\fetchAllDistances();

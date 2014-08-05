@@ -63,6 +63,10 @@ function execute($sql) {
     return $result;
 }
 
+function insertId() {
+    return mysqli_insert_id(_connection());
+}
+
 function _sanitize($var) {
     if (is_array($var)) {
         return array_map('\db\_sanitize', $var);

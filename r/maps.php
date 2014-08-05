@@ -14,10 +14,10 @@ define('MIN_MAPKIT_LAT', -85);
 define('MAX_MAPKIT_LAT',  85);
 
 /* PHP implementation of the MapKit MKMapPointForCoordinate function.
-
-   Formulas from: http://stackoverflow.com/questions/14329691/covert-latitude-longitude-point-to-a-pixels-x-y-on-mercator-projection
-
-   Regarding the +/-85 latitude cutoff: https://code.google.com/p/gmaps-api-issues/issues/detail?id=6391
+ *
+ * Formulas from: http://stackoverflow.com/questions/14329691/
+ *
+ * Regarding the +/-85 latitude cutoff: https://code.google.com/p/gmaps-api-issues/issues/detail?id=6391
  */
 function toPoint($lat, $lng) {
     if (!isValidCoordinate($lat, $lng)) {
