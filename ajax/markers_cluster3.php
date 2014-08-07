@@ -127,9 +127,8 @@ require_once('sql/proximity_index_tables.php');
      - Maybe this is faster as a stored procedure, or at least in Java
 
  */
-//define('PROXIMITY', 5000000);
-define('MAX_PROXIMITY', 1000000); //things > this far apart will never be clustered
-define('PROXIMITY', 100);
+define('PROXIMITY', 5000000);
+//define('MAX_PROXIMITY', 1000000); //things > this far apart will never be clustered
 
 //1. FIND NODE PAIRS WITH DISTANCE < PROXIMITY ////////////////////////////////
 
@@ -140,19 +139,19 @@ $points = \sql\points\fetchAll();
 foreach ($points as $point) {
     $id_1 = $point['id'];
 
-    $microtime = microtime(TRUE);
+    //$microtime = microtime(TRUE);
     $nearbyPoints = \sql\points\fetchNearbyPoints($id_1, $point['x'], $point['y'], PROXIMITY);
 
     foreach ($nearbyPoints as $nearbyPoint) {
         $id_2 = $nearbyPoint['id'];
         $distance = $nearbyPoint['distance'];
 
-        //if ($distance < PROXIMITY) { //trim the corners off the rectangle
+        if ($distance < PROXIMITY) { //trim the corners off the rectangle
             \sql\proximity_index_tables\insert(1, $id_1, $id_2, $distance);
-        //}
+        }
     }
-    echo microtime(TRUE) - $microtime; echo "\n"; flush(); $microtime = microtime(TRUE);
-    exit();
+    //echo microtime(TRUE) - $microtime; echo "\n"; flush(); $microtime = microtime(TRUE);
+    //exit();
 }
 
 if (DEBUG) {
