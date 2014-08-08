@@ -7,7 +7,7 @@ require_once('sql/points.php');
 $coordinates = array();
 
 foreach (\sql\points\fetchAll() as $coordinate) {
-    array_push($coordinates, array('lat' => $coordinate['lat'], 'lng' => $coordinate['lng']));
+    array_push($coordinates, array('id' => $coordinate['id'], 'lat' => $coordinate['lat'], 'lng' => $coordinate['lng']));
 }
 
 echo json_encode($coordinates);

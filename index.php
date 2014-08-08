@@ -51,10 +51,12 @@ function loadMarkers(script) {
         markers[script] = [];
 
         for (var i = 0; i < data.length; i++) {
+            var id = data[i]['id'];
+
             var lat = data[i]['lat'];
             var lng = data[i]['lng'];
 
-            var marker = new google.maps.Marker({ position: new google.maps.LatLng(lat, lng)});
+            var marker = new google.maps.Marker({ position: new google.maps.LatLng(lat, lng), title: id});
 
             markers[script].push(marker);
         }
@@ -64,46 +66,16 @@ function loadMarkers(script) {
 }
 
 function hideAllMarkers() {
-    if (markers['/ajax/markers.php'] != null) {
-        hideMarkers(markers['/ajax/markers.php']);
-    }
-
-    if (markers['/ajax/markers_cluster1.php'] != null) {
-        hideMarkers(markers['/ajax/markers_cluster1.php']);
-    }
-
-    if (markers['/ajax/markers_cluster2.php'] != null) {
-        hideMarkers(markers['/ajax/markers_cluster2.php']);
-    }
-
-    if (markers['/ajax/markers_cluster3.php'] != null) {
-        hideMarkers(markers['/ajax/markers_cluster3.php']);
+    for (v in markers) {
+        hideMarkers(markers[v]);
     }
 }
 
 $(function() {
-    $('#0').click(function() {
+    $('input[type="button"]').click(function() {
         hideAllMarkers();
 
-        loadMarkers('/ajax/markers.php');
-    });
-
-    $('#1').click(function() {
-        hideAllMarkers();
-
-        loadMarkers('/ajax/markers_cluster1.php');
-    });
-
-    $('#2').click(function() {
-        hideAllMarkers();
-
-        loadMarkers('/ajax/markers_cluster2.php');
-    });
-
-    $('#3').click(function() {
-        hideAllMarkers();
-
-        loadMarkers('/ajax/markers_cluster3.php');
+        loadMarkers($(this).attr('file'));
     });
 });
 
@@ -111,10 +83,20 @@ $(function() {
 </head>
 <body>
     <div style="position: absolute; z-index: 999999; bottom: 10px; left: 10px">
-        <input type="button" id="0" value="All">
-        <input type="button" id="1" value="Grid">
-        <input type="button" id="2" value="Nearest neighbour (incomplete)">
-        <input type="button" id="3" value="Nearest neighbour (distance limited)">
+        <input type="button" value="All" file="/ajax/markers.php">
+        <input type="button" value="Grid" file="/ajax/markers_cluster1.php">
+        <input type="button" value="Nearest neighbour (incomplete)" file="/ajax/markers_cluster2.php">
+        <input type="button" value="Nearest neighbour (distance limited)" file="/ajax/markers_cluster3.php">
+        <input type="button" value="C1 (1)" file="/ajax/markers_cluster4.php?level=1">
+        <input type="button" value="C1 (2)" file="/ajax/markers_cluster4.php?level=2">
+        <input type="button" value="C1 (3)" file="/ajax/markers_cluster4.php?level=3">
+        <input type="button" value="C1 (4)" file="/ajax/markers_cluster4.php?level=4">
+        <input type="button" value="C1 (5)" file="/ajax/markers_cluster4.php?level=5">
+        <input type="button" value="C1 (6)" file="/ajax/markers_cluster4.php?level=6">
+        <input type="button" value="C1 (7)" file="/ajax/markers_cluster4.php?level=7">
+        <input type="button" value="C1 (8)" file="/ajax/markers_cluster4.php?level=8">
+        <input type="button" value="C1 (9)" file="/ajax/markers_cluster4.php?level=9">
+        <input type="button" value="C1 (10)" file="/ajax/markers_cluster4.php?level=10">
     </div>
     <div id="map-canvas" />
 </body>

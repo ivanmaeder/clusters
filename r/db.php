@@ -21,7 +21,7 @@ function _connection() {
 }
 
 function _internalServerError($error) {
-    if ($_SERVER['HTTP_HOST'] == 'localhost') {
+    if (!isset($_SERVER['HTTP_HOST']) || $_SERVER['HTTP_HOST'] == 'localhost') {
         trigger_error($error);
     }
     else {
@@ -44,6 +44,8 @@ function fetchAll($sql) {
 }
 
 function fetch($sql) {
+    $row = NULL; //loop may not run
+
     foreach (fetchAll($sql) as $row) {
         break;
     }

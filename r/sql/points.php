@@ -24,7 +24,7 @@ function fetchNearbyPoints($id, $x, $y, $distance = NULL) {
               WHERE id > $id\n";
 
     if ($distance) {
-        $polygon = _cross($x, $y, $distance);
+        $polygon = _hexagon($x, $y, $distance);
 
         $sql .= "AND ST_CONTAINS(GEOMFROMTEXT('$polygon'), point)\n";
     }

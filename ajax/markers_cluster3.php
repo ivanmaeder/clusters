@@ -128,7 +128,7 @@ require_once('sql/proximity_index_tables.php');
 
  */
 define('PROXIMITY', 5000000);
-//define('MAX_PROXIMITY', 1000000); //things > this far apart will never be clustered
+//define('MAX_PROXIMITY', 1000000); //things > this far apart will never be clustered; maybe even half that
 
 //1. FIND NODE PAIRS WITH DISTANCE < PROXIMITY ////////////////////////////////
 
@@ -146,9 +146,9 @@ foreach ($points as $point) {
         $id_2 = $nearbyPoint['id'];
         $distance = $nearbyPoint['distance'];
 
-        if ($distance < PROXIMITY) { //trim the corners off the rectangle
+        //if ($distance < PROXIMITY) {
             \sql\proximity_index_tables\insert(1, $id_1, $id_2, $distance);
-        }
+        //}
     }
     //echo microtime(TRUE) - $microtime; echo "\n"; flush(); $microtime = microtime(TRUE);
     //exit();
@@ -160,7 +160,7 @@ if (DEBUG) {
 //2. CLUSTER CLOSEST NODES ////////////////////////////////////////////////////
 
 \sql\cluster_tables\truncate(1);
-\sql\cluster_tables\copyPoints(1);
+\sql\cluster_tables\copyPointsTo(1);
 
 \sql\cluster_children_tables\truncate(1);
 
