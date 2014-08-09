@@ -2,20 +2,18 @@
 
 /* This fries the CPU while it's working, the fans can't keep up.
 
-     ------  --------------  --------------  --------------  ----  -----
-     Points  Time taken      Time taken      Time taken      Runs  Cache
+     ------  --------------  --------------  --------------  -----  -----
+     Points  Time taken      Time taken      Time taken      Tests  Cache
              min (s)         max (s)         average (s)           size
-     ------  --------------  --------------  --------------  ----  -----
-        500   15.5763900280   17.7834279537   16.6462629636     3      ?
-      1,000   28.4845070838   31.9279808998   30.2062439918     2    250
-      2,000   56.3349969387   83.1703760624   69.7526865006     2    600
-      4,000  116.8473930359  122.7696211338  119.8085070849     2   1300
-      8,000  321.8266918659  321.8266918659  321.8266918659     1      ?
-     ------  --------------  --------------  --------------  ----  -----
+     ------  --------------  --------------  --------------  -----  -----
+        500   15.5763900280   17.7834279537   16.6462629636      3      ?
+      1,000   28.4845070838   31.9279808998   30.2062439918      2    250
+      2,000   56.3349969387   83.1703760624   69.7526865006      2    600
+      4,000  116.8473930359  122.7696211338  119.8085070849      2   1300
+      8,000  321.8266918659  321.8266918659  321.8266918659      1      ?
+     ------  --------------  --------------  --------------  -----  -----
    
  */
-
-$microtime = microtime(TRUE);
 
 require_once('../r/db.php');
 require_once('../r/maps.php');
@@ -30,23 +28,29 @@ define('INDEX_TABLES_SOURCE', 'points');
 
 define('CLUSTER_LEVELS', 10);
 
-for ($clusterLevel = 1; $clusterLevel <= CLUSTER_LEVELS; $clusterLevel++) {
-    initializeTables($clusterLevel);
+buildCluster();
+
+function buildCluster() {
+    $microtime = microtime(TRUE);
+
+    for ($clusterLevel = 1; $clusterLevel <= CLUSTER_LEVELS; $clusterLevel++) {
+        initializeTables($clusterLevel);
+    }
+
+    $distance = 1000;
+
+    for ($clusterLevel = 1; $clusterLevel <= CLUSTER_LEVELS; $clusterLevel++) {
+        $inputPoints = \sql\cluster_tables\fetchAll($clusterLevel - 1);
+
+        indexProximityBetweenInputPoints($clusterLevel, $inputPoints, $distance);
+
+        clusterIndexedPoints($clusterLevel);
+
+        $distance += $clusterLevel * 200000;
+    }
+
+    echo 'Time taken: ' . (microtime(TRUE) - $microtime) . "s\n";
 }
-
-$distance = 1000;
-
-for ($clusterLevel = 1; $clusterLevel <= CLUSTER_LEVELS; $clusterLevel++) {
-    $inputPoints = \sql\cluster_tables\fetchAll($clusterLevel - 1);
-
-    indexProximityBetweenInputPoints($clusterLevel, $inputPoints, $distance);
-
-    clusterIndexedPoints($clusterLevel);
-
-    $distance += $clusterLevel * 200000;
-}
-
-echo 'Time taken: ' . (microtime(TRUE) - $microtime) . "s\n";
 
 /* These tables are used to store the data for each level of the clustering
    hierarchy.
