@@ -1,10 +1,6 @@
 # A PHP/MySQL single/average-linkage clustering implementation
 
-All the work is done in this file:
-
-```/index/index.php```
-
-This is what builds the cluster hierarchy. In each iteration, the code:
+All the work is done in `/index/index.php`. This is what builds the cluster hierarchy. In each iteration, the code:
 
   1. Finds the closest points between pairs of points/clusters
   2. Creates a new set of clusters based on those pairs which are the input for the next iteration
